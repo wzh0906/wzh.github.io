@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>罐子实验</title>
+    <style>
+
+        body {
+            font-family: "Times New Roman", "楷体", serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .reward-info {
+            position: absolute;
+            top: 12%;
+            right: 20%;
+            padding: 5px 10px;
+            background-color: white;
+            border: 0.1px solid #000;
+            border-radius: 5px;
+            width: 100px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        .reward-info div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px 0;
+        }
+        .reward-info div span {
+            margin-left: 5px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+        }
+        .jar-contain {
+            text-align: center;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .jar {
+            border-radius: 10px;
+            padding: 20px;
+            width: 150px;
+            height: 150px;
+            text-align: center;
+            background-image: url('罐子.png');
+            background-size: cover;
+            background-position: center;
+        }
+       
+        .ball-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            margin-top: 65px;
+        }
+        .ball {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: grey;
+            margin: 3px auto;
+        }
+        .red { background-color: red; }
+        .blue { background-color: blue; }
+        .round {
+            margin-top: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #555;
+        }
+        .slider-container {
+            width: 60%;
+            margin-top: 0px;
+            padding: 20px;
+            display: none;
+        }
+        .slider-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            margin-left: -100px;
+        }
+        .slider-label {
+            font-size: 1.1em;
+            margin-right: -289px; 
+            width: 500px;
+            text-align: left;
+        }
+        .slider-input {
+            flex: 1;
+            margin-right: 10px;
+            height: 8px;
+        }
+        .slider-value {
+            width: 50px;
+            padding: 5px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .slider-ticks {
+            display: flex;
+            justify-content: space-between;
+            margin-top: -20px;
+            font-size: 0.9em;
+            color: #555;
+            padding-left: 45px;
+            padding-right: 5px;
+        }
+        .slider-ticks span {
+            width: 200px;
+            text-align: center;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px #999;
+        }
+        .blank-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #555;
+            z-index: 1000;
+        }
+        #roundInfo {
+            font-size: 1.0em;
+            line-height: 1.5;
+            color: #333;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .reward-result {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border: 1px solid #000;
+            border-radius: 10px;
+            z-index: 2000;
+            max-width: 90%;
+            width: 800px;
+            text-align: center;
+            display: none;
+        }
+        .jars-display {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 30px 0;
+        }
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+            }
+            .jar-contain {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .reward-info {
+                width: 95%;
+            }
+        }
+        /* 结果展示样式 */
+        .phase-container {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        .phase-title {
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .comparison-jars {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 20px 0;
+        }
+        .jar-group {
+            text-align: center;
+        }
+        .jar-group h3 {
+            margin: 10px 0;
+            color: #34495e;
+        }
+        .highlight {
+            color: #000;
+            font-weight: bold;
+        }
+        /* 滚动容器样式 */
+        .reward-result {
+            max-height: 80vh; /* 限制容器高度 */
+            overflow-y: auto; /* 启用垂直滚动 */
+            padding: 20px;
+            margin: 20px;
+        }
+
+        /* 之前的样式保持不变 */
+        .quiz-container {
+            display: none; /* 初始隐藏问卷 */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 97%;
+            height: 90%;
+            background: white;
+            z-index: 9999;
+            text-align: center;
+            padding: 20px;
+            overflow-y: auto;
+            
+        }
+        .quiz-container h3 {
+            margin-bottom: 20px;
+        }
+        .quiz-container form {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            font-size: 1.5em;
+        }
+        .quiz-container p {
+            margin: 15px 0;
+        }
+        .quiz-container input[type="radio"] {
+            margin-right: 10px;
+        }
+        .quiz-container button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+       /* 基础容器样式 */
+        div[class^="page"] {
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+/* 信息强调块 */
+.info-block {
+    background: #f8f9fa;
+    border-left: 4px solid #395ca2;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</head>
+<body>
+    <!-- 实验指导语 -->
+    
+
+   <div id="instruction" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; text-align: center; padding: 20px; overflow-y: auto;"> 
+    <div id="page1">
+        <h2>实验说明</h2>
+        <div style="max-width:800px; margin:20px auto; text-align:left">
+            <p style="font-size:1.2em; line-height:1.6">
+                欢迎参加本次实验！请认真阅读以下指导语，后续您将回答一些相关问题，如果回答正确则进入正式实验，如果回答错误需要重新阅读指导语。
+            </p>
+        </div>
+        <button onclick="showPage(2)">我同意</button>
+    </div>
+    <div id="page2" style="display:none">
+        <div style="max-width:800px; margin:20px auto; text-align:left">
+            <p style="font-size:1.2em; line-height:1.6">
+                如下图所示，您会看到两个罐子，每个罐子里装有十个球，这些球的颜色要么是<span style='color:red'>红色</span>，要么是<span style='color:blue'>蓝色</span>。但是，<span style='color:#395ca2'><strong>两个罐子中都有部分球的颜色显示为灰色，灰色的球表示球的颜色未知</strong>。
+                <img src="intro_jar.png" style="width:55%;
+                                                border:1px solid #ddd;
+                                                display: block;  
+                                                margin: 0 auto;
+                                                margin-top: 20px"> 
+            </p>
+            
+        </div>
+        <button onclick="showPage(3)" >下一页 ▶</button>
+    </div>
+    <div id="page3" style="display:none">
+        <div style="max-width:800px; margin:20px auto; text-align:left">
+            <p style="font-size:1.2em; line-height:1.6"> 
+                您将选择一个罐子进行模拟抽球游戏，系统将从所选罐子中的十个球里抽取一个。抽出球的颜色将决定您的最终报酬。面对两个信息不同的罐子，您需要根据个人偏好选择一个进行抽球游戏。<span style='color:#395ca2'><strong>实验的基础报酬为5元，如果您抽到红球，将额外获得2元，共计获得7元报酬；如果您抽到蓝球，将损失2元，共计获得3元报酬。</strong></span>
+            </p>
+            <img src="intro_reward.png" style="width:75%;
+                                                border:1px solid #ddd;
+                                                display: block;  
+                                                margin: 0 auto;
+                                                margin-top: 20px"> 
+        </div>
+        <button onclick="showPage(2)">◀ 上一页</button>
+        <button onclick="showPage(4)" style="margin-left:20px">下一页 ▶</button>
+    </div>
+    
+    <div id="page4" style="display:none">
+        <div style="max-width:800px; margin:20px auto; text-align:left">
+            <p style="font-size:1.2em; line-height:1.6"> 
+                为了了解您偏好的强烈程度，请您对100个意愿点进行分配。具体来说，<span style='color:#395ca2'><strong>分配给某个罐子的意愿点越多，代表您越倾向于选择该罐子进行抽球游戏。</strong></span>例如:<br>
+                <li style="font-size:1.2em; line-height:1.6">如果您将0个意愿点分配给罐A，而将100个意愿点分配给罐B，这表示您完全倾向于选择罐B进行抽球游戏，而不考虑罐A。<br>
+                <li style="font-size:1.2em; line-height:1.6">如果您分配给罐A和罐B各50个愿意点，则表示您对两个罐子的偏好相同。<br>
+                <li style="font-size:1.2em; line-height:1.6">如果您将80个意愿点分配给罐A，20个意愿点给罐B，则表示您更倾向于选择罐A。
+            </p>
+        </div>
+        <button onclick="showPage(3)">◀ 上一页</button>
+        <button onclick="showPage(5)" style="margin-left:20px">下一页 ▶</button>
+    </div>
+    
+    <div id="page5" style="display:none">
+        <div style="max-width:800px; margin:20px auto; text-align:left">
+        <p style="font-size:1.2em; line-height:1.6"> 
+            如下图所示，在实验中您需要拖动滑块来分配意愿点，在拖动滑块的过程中，您将看到您具体分配给罐A和罐B的意愿点。当您完成意愿点分配后，请点击“确认分配”。
+            <img src='intro_slider.png' style='width: 100%;margin-left:0%;margin-right:10%;margin-top:3%;margin-bottom:2%;border-style: ridge;'>
+            确认后，您将会看到<span style='color:#395ca2'><strong>一对新的罐子</strong></span>，游戏规则相同，请您继续分配意愿点。
+            本实验中，您需要按照以上规则对<span style='color:#395ca2'><strong>100对罐子</strong></span>分配意愿点。
+        </p>
+            </div>
+            
+
+        <button onclick="showPage(4)">◀ 上一页</button>
+        <button onclick="showPage(6)" style="margin-left:20px">下一页 ▶</button>
+       
+    </div>
+
+    <div id="page6" style="display:none">
+        <div style="max-width:800px; margin:20px auto; text-align:left">
+            <p style="font-size:1.2em; line-height:1.6"> 
+                请注意，您每次分配意愿点的结果都将被记录。实验完成后，系统将在您所有的意愿点分配记录（共计100条）中<span style='color:#395ca2'><strong>随机抽取一条</strong></span>，并依据您的意愿点分配选择相应罐子进行模拟抽球游戏，<span style='color:#395ca2'><strong>这将决定您可以获得的额外奖励</strong></span>。<br><br>
+                例如：您给罐A分配了25个意愿点，给罐B分配了75个意愿点，那么系统首先将决定使用哪个罐子抽球，选择罐A的概率为25%，选择罐B的概率为75%。
+                <span style='color:#395ca2'><strong>您最终获得的报酬与您的意愿点分配结果有关，所以请您在认真思考后做决定。</strong></span><br><br>
+                如果您已经理解该游戏，请点击“开始答题”按钮，回答问题。
+            </p>
+        </div>
+            
+
+        <button onclick="showPage(5)">◀ 上一页</button>
+        <button onclick="showQuiz()" style="margin-left:20px">开始答题</button>
+    </div>
+</div>
+
+
+    <!-- 问卷页面 -->
+    <div id="quiz" class="quiz-container">
+        <h3>理解测试</h3>
+        <form id="quizForm">
+            <!-- 问题1 -->
+            <p>1. 在模拟游戏中，您会同时看到_____个罐子。</p>
+            <input type="radio" name="q1" value="1"> 1<br>
+            <input type="radio" name="q1" value="2"> 2<br>
+            <input type="radio" name="q1" value="3"> 3<br>
+            <input type="radio" name="q1" value="4"> 4<br>
+
+            <!-- 问题2 -->
+            <p>2. 罐子中的球可能有以下哪三种颜色？</p>
+            <input type="radio" name="q2" value="1"> 红色 黄色 绿色<br>
+            <input type="radio" name="q2" value="2"> 黄色 绿色 白色<br>
+            <input type="radio" name="q2" value="3"> 蓝色 灰色 黄色<br>
+            <input type="radio" name="q2" value="4"> 红色 蓝色 灰色<br>
+
+            <!-- 问题3 -->
+            <p>3. 抽到红色的球能会获得额外____，抽到蓝色的球会获得额外____。</p>
+            <input type="radio" name="q3" value="1"> 收益 损失<br>
+            <input type="radio" name="q3" value="2"> 损失 收益<br>
+            <input type="radio" name="q3" value="3"> 收益 收益<br>
+            <input type="radio" name="q3" value="4"> 损失 损失<br>
+
+            <!-- 问题4 -->
+            <p>4. 分配意愿点时，以下说法正确的是：</p>
+            <input type="radio" name="q4" value="1"> 两个罐子里所有球的颜色都未知<br>
+            <input type="radio" name="q4" value="2"> 有一个罐子里所有球的颜色已知<br>
+            <input type="radio" name="q4" value="3"> 两个罐子都有部分球的颜色未知<br>
+            <input type="radio" name="q4" value="4"> 两个罐子里所有球的颜色都已知<br>
+
+            <!-- 问题5 -->
+            <p>5. 小明在一个试次中分配给A罐90个意愿点，给B罐10个意愿点，这表示：</p>
+            <input type="radio" name="q5" value="1"> 小明强烈偏好A罐<br>
+            <input type="radio" name="q5" value="2"> 小明略微偏好A罐<br>
+            <input type="radio" name="q5" value="3"> 小明略微偏好B罐<br>
+            <input type="radio" name="q5" value="4"> 小明强烈偏好B罐<br>
+
+            <!-- 问题6 -->
+            <p>6. 如图，如果根据该记录结算额外报酬，抽到A罐结算的概率为____。在抽到A罐的基础上，额外获得2元的概率为____：</p>
+            <img src='question.png' style='width: 100%;margin-left:0%;margin-right:10%;margin-top:3%;margin-bottom:2%;border-style: ridge;'>
+            <input type="radio" name="q6" value="1"> 90%, 20%<br>
+            <input type="radio" name="q6" value="2"> 10%, 20%<br>
+            <input type="radio" name="q6" value="3"> 90%, 无法确定<br>
+            <input type="radio" name="q6" value="4"> 10%, 无法确定<br>
+
+
+           
+        </form>
+        <button onclick="checkQuiz()">提交答案</button>
+    </div>
+
+    <!-- 实验内容 -->
+    <div class="reward-info">
+        <div>
+            <div style="width: 20px; height: 20px; background-color: red; border-radius: 50%;"></div>
+            <span>=+2yuan</span>
+        </div>
+        <div>
+            <div style="width: 20px; height: 20px; background-color: blue; border-radius: 50%;"></div>
+            <span>=-2yuan</span>
+        </div>
+    </div>
+    <div class="container">
+        <div id="jarA"></div>
+        <div id="jarB"></div>
+    </div>
+    <div class="round" id="roundInfo"></div>
+    <div class="slider-container">
+        <div class="slider-wrapper">
+            <div class="slider-label">willingness points for Jar A</div>
+            <input type="range" id="sliderA" class="slider-input" min="0" max="100" value="50" step="1">
+            <div class="slider-value" id="sliderAValue">50</div>
+        </div>
+        <div class="slider-ticks">
+            <span>0</span>
+            <span>25</span>
+            <span>50</span>
+            <span>75</span>
+            <span>100</span>
+        </div>
+        <div class="slider-wrapper">
+            <div class="slider-label">willingness points for Jar B</div>
+            <input type="range" id="sliderB" class="slider-input" min="0" max="100" value="50" step="1">
+            <div class="slider-value" id="sliderBValue">50</div>
+        </div>
+        <div class="slider-ticks">
+            <span>0</span>
+            <span>25</span>
+            <span>50</span>
+            <span>75</span>
+            <span>100</span>
+        </div>
+    </div>
+    <div class="blank-screen" id="blankScreen"></div>
+    <button id="startButton">Begin the Experiment</button>
+
+    <!-- 奖励结果展示 -->
+    <div id="rewardResult" class="reward-result" style="display: none;">
+        <h2>🎉 Ball Draw Result 🎉</h2>
+        
+        <div class="phase-container">
+            <div class="phase-title">▎Round Draw</div>
+            <p>Round <span id="selectedRoundText" class="highlight"></span> has been randomly selected by the system from all allocated trials. </p>
+        </div>
+
+        <div class="phase-container">
+            <div class="phase-title">▎The state of the two jars at that moment</div>
+            
+            <div class="comparison-jars">
+                <div class="jar-group">
+                   
+                    <div id="originalJarA"></div>
+                </div>
+                <div class="jar-group">
+                    
+                    <div id="originalJarB"></div>
+                </div>
+            </div>
+            <p>Your willingness points were allocated as follows: JarA  <span id="originalJarAPercent" class="highlight"></span>  JarB  <span id="originalJarBPercent" class="highlight"></span>.</p>
+        </div>
+
+        <div class="phase-container">
+            <div class="phase-title">▎The actual selection process</div>
+            <p>Based on the allocation ratio of your willingness points, the system randomly selected <span id="selectedJarExplanation" class="highlight"></span>.</p>
+            
+            <div class="phase-container">
+                <div class="phase-title">▎The actual state of the two jars</div>
+               
+                <div class="comparison-jars">
+                    <div class="jar-group">
+                        
+                        <div id="resultJarA"></div>
+                    </div>
+                    <div class="jar-group">
+                       
+                        <div id="resultJarB"></div>
+                    </div>
+                </div>
+            </div>
+
+            <p>The color of the ball randomly drawn from <span id="selectedJarName" class="highlight"></span> by the system is <span id="ballColorExplanation" class="highlight"></span>,
+            which means your reward will be <span id="rewardExplanation" class="highlight"></span> yuan.
+            </p>
+        </div>
+
+        <button id="closeResult">End the Experiment</button>
+    </div>
+
+    <script>
+        const jarA = document.getElementById('jarA');
+        const jarB = document.getElementById('jarB');
+        const totalRounds = 3;
+        let currentRound = 0;
+        let isSliderMoved = false;
+        const experimentData = [];
+        
+        const sliderContainer = document.querySelector('.slider-container');
+        const sliderA = document.getElementById('sliderA');
+        const sliderB = document.getElementById('sliderB');
+        const sliderAValue = document.getElementById('sliderAValue');
+        const sliderBValue = document.getElementById('sliderBValue');
+        const startButton = document.getElementById('startButton');
+        const blankScreen = document.getElementById('blankScreen');
+ 
+
+        sliderA.addEventListener('input', syncSliders);
+        sliderB.addEventListener('input', syncSliders);
+        startButton.addEventListener('click', startExperiment);
+
+        function syncSliders() {
+            const total = parseInt(sliderA.value) + parseInt(sliderB.value);
+            if (total !== 100) {
+                if (this === sliderA) {
+                    sliderB.value = 100 - sliderA.value;
+                } else {
+                    sliderA.value = 100 - sliderB.value;
+                }
+            }
+            sliderAValue.textContent = sliderA.value;
+            sliderBValue.textContent = sliderB.value;
+            isSliderMoved = true;
+        }
+            
+
+
+        function showBlankScreen() {
+            blankScreen.style.display = "flex";
+            sliderContainer.style.display = "none";
+            startButton.style.display = "none";
+
+            setTimeout(() => {
+                if (currentRound < totalRounds) {
+                    blankScreen.style.display = "none";
+                    sliderContainer.style.display = "block";
+                    startButton.style.display = "block";
+                    showJars();
+                    isSliderMoved = false;
+                } else {
+                    calculateAndDisplayReward();
+                }
+            }, 500);
+        }
+
+        function showJars() {
+            currentRound++;
+            document.getElementById("roundInfo").textContent = "Please adjust the slider to allocate 100 willingness points between the 2 jars based on how willing you are to choose each one.";
+
+            const ballsA = generateBallsA();
+            const ballsB = generateBallsB(ballsA.greyCount);
+
+            document.getElementById("jarA").innerHTML = generateJar('A', ballsA.balls, currentRound);
+            document.getElementById("jarB").innerHTML = generateJar('B', ballsB.balls, currentRound);
+
+            sliderA.value = 50;
+            sliderB.value = 50;
+            sliderAValue.textContent = 50;
+            sliderBValue.textContent = 50;
+
+            experimentData.push({
+                round: currentRound,
+                jarAValue: 50,
+                jarBValue: 50,
+                redCountA: ballsA.redCount,
+                blueCountA: ballsA.blueCount,
+                redCountB: ballsB.redCount,
+                blueCountB: ballsB.blueCount
+            });
+        }
+
+        function recordData() {
+            experimentData[currentRound - 1].jarAValue = parseInt(sliderA.value);
+            experimentData[currentRound - 1].jarBValue = parseInt(sliderB.value);
+            if (currentRound === totalRounds) exportToExcel();
+        }
+
+        function exportToExcel() {
+            const wsData = [
+                ["轮次", "罐A意愿点", "罐B意愿点", "罐A红球数", "罐A蓝球数", "罐B红球数", "罐B蓝球数"],
+                ...experimentData.map(data => [
+                    data.round,
+                    data.jarAValue,
+                    data.jarBValue,
+                    data.redCountA,
+                    data.blueCountA,
+                    data.redCountB,
+                    data.blueCountB
+                ])
+            ];
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "实验数据");
+            XLSX.writeFile(wb, "实验数据.xlsx");
+        }
+
+        function generateBallsA() {
+            const greyCount = Math.floor(Math.random() * 4) + 5;
+            const remaining = 10 - greyCount;
+            let redCount = Math.floor(Math.random() * (remaining + 1));
+            let blueCount = remaining - redCount;
+            
+            while(blueCount > redCount) {
+                redCount = Math.floor(Math.random() * (remaining + 1));
+                blueCount = remaining - redCount;
+            }
+            
+            return {
+                balls: [...Array(redCount).fill('red'), ...Array(blueCount).fill('blue'), ...Array(greyCount).fill('grey')],
+                redCount,
+                blueCount,
+                greyCount
+            };
+        }
+
+        function generateBallsB(maxGrey) {
+            const greyCount = Math.floor(Math.random() * (maxGrey - 4)) + 4;
+            const remaining = 10 - greyCount;
+            let redCount = Math.floor(Math.random() * (remaining + 1));
+            let blueCount = remaining - redCount;
+            
+            while(blueCount > redCount) {
+                redCount = Math.floor(Math.random() * (remaining + 1));
+                blueCount = remaining - redCount;
+            }
+            
+            return {
+                balls: [...Array(redCount).fill('red'), ...Array(blueCount).fill('blue'), ...Array(greyCount).fill('grey')],
+                redCount,
+                blueCount,
+                greyCount
+            };
+        }
+
+        function generateJar(jarType, balls) {
+            return `
+                <div class="jar-contain">
+                    <div><strong>Jar${jarType}</strong></div>
+                    <div class="jar">
+                        <div class="ball-container">
+                            ${balls.map(color => `<div class="ball ${color}"></div>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function calculateAndDisplayReward() {
+            // 隐藏其他界面元素
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('roundInfo').style.display = 'none';
+            sliderContainer.style.display = 'none';
+            startButton.style.display = 'none';
+            blankScreen.style.display = 'none';
+
+            // 随机选择试次
+            const selectedTrial = experimentData[Math.floor(Math.random() * experimentData.length)];
+
+            // 生成原始罐子显示（分配时的状态）
+            const originalBallsA = [
+                ...Array(selectedTrial.redCountA).fill('red'),
+                ...Array(selectedTrial.blueCountA).fill('blue'),
+                ...Array(10 - selectedTrial.redCountA - selectedTrial.blueCountA).fill('grey')
+            ];
+            
+            const originalBallsB = [
+                ...Array(selectedTrial.redCountB).fill('red'),
+                ...Array(selectedTrial.blueCountB).fill('blue'),
+                ...Array(10 - selectedTrial.redCountB - selectedTrial.blueCountB).fill('grey')
+            ];
+
+            // 显示原始罐子
+            document.getElementById('originalJarA').innerHTML = generateJar('A', originalBallsA);
+            document.getElementById('originalJarB').innerHTML = generateJar('B', originalBallsB);
+
+            // 生成实际抽取罐子（替换灰球）
+           const actualBallsA = [
+                ...Array(selectedTrial.redCountA).fill('red'),
+                ...Array(selectedTrial.blueCountA).fill('blue'),
+                ...Array(10 - selectedTrial.redCountA - selectedTrial.blueCountA)
+                    .fill().map(() => Math.random() < 0.5 ? 'red' : 'blue')
+            ]
+
+            const actualBallsB = [
+                ...Array(selectedTrial.redCountB).fill('red'),
+                ...Array(selectedTrial.blueCountB).fill('blue'),
+                ...Array(10 - selectedTrial.redCountB - selectedTrial.blueCountB)
+                    .fill().map(() => Math.random() < 0.5 ? 'red' : 'blue')
+            ]
+            
+            // 显示实际罐子
+            document.getElementById('resultJarA').innerHTML = generateJar('A', actualBallsA);
+            document.getElementById('resultJarB').innerHTML = generateJar('B', actualBallsB);
+
+            // 执行抽取逻辑
+            const total = selectedTrial.jarAValue + selectedTrial.jarBValue;
+            const selectedJar = Math.random() * total < selectedTrial.jarAValue ? 'A' : 'B';
+            const selectedBalls = selectedJar === 'A' ? actualBallsA : actualBallsB;
+            const randomBall = selectedBalls[Math.floor(Math.random() * 10)];
+
+            // 填充所有文本信息
+            document.getElementById('selectedRoundText').textContent = selectedTrial.round;
+            document.getElementById('originalJarAPercent').textContent = selectedTrial.jarAValue;
+            document.getElementById('originalJarBPercent').textContent = selectedTrial.jarBValue;
+            document.getElementById('selectedJarExplanation').textContent = `Jar ${selectedJar}`;
+            document.getElementById('selectedJarName').textContent = `Jar ${selectedJar}`;
+            document.getElementById('ballColorExplanation').textContent = randomBall === 'red' ? 'red' : 'blue';
+            document.getElementById('rewardExplanation').textContent = randomBall === 'red' ? '+2' : '-2';
+            // 设置球颜色文字的颜色
+            const ballColorSpan = document.getElementById('ballColorExplanation');
+            ballColorSpan.style.color = randomBall === 'red' ? 'red' : 'blue';
+            // 设置报酬文字的颜色
+            const rewardSpan = document.getElementById('rewardExplanation');
+            rewardSpan.style.color = randomBall === 'red' ? 'red' : 'blue';
+            // 显示结果界面
+            document.getElementById('rewardResult').style.display = 'block';
+        }
+
+        document.getElementById('closeResult').addEventListener('click', () => {
+            document.getElementById('rewardResult').style.display = 'none';
+            showEndScreen();
+        });
+
+         // 显示实验结束界面
+         function showEndScreen() {
+            blankScreen.textContent = "Thank you for being part of this study! You can press the spacebar to exit now, or the system will close in 10 seconds.";
+            blankScreen.style.display = "flex";
+
+            // 监听空格键按下事件
+            document.addEventListener("keydown", function(event) {
+                if (event.code === "Space") {
+                    window.close();
+                }
+            });
+
+            // 10秒后自动退出
+            setTimeout(() => {
+                window.close();
+            }, 10000);
+        }
+
+        // 指导语页面切换
+        function showPage(pageNumber) {
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`page${i}`).style.display = 'none';
+            }
+            document.getElementById(`page${pageNumber}`).style.display = 'block';
+        
+        } 
+        
+        // 显示问卷页面
+        function showQuiz() {
+            document.getElementById('instruction').style.display = 'none'; // 隐藏指导语
+            document.getElementById('quiz').style.display = 'block'; // 显示问卷
+            resetQuiz(); // 清空之前的答案
+        }
+
+        // 清空问卷答案
+        function resetQuiz() {
+            const form = document.getElementById('quizForm');
+            const inputs = form.querySelectorAll('input[type="radio"]');
+            inputs.forEach(input => (input.checked = false)); // 清空所有选项
+        }
+
+        // 检查问卷答案
+        function checkQuiz() {
+            const answers = [
+                { name: 'q1', correct: '2' },
+                { name: 'q2', correct: '4' },
+                { name: 'q3', correct: '1' },
+                { name: 'q4', correct: '3' },
+                { name: 'q5', correct: '1' },
+                { name: 'q6', correct: '3' },
+            ];
+
+            let allAnswered = true;
+            let correctCount = 0;
+
+            answers.forEach(answer => {
+                const selected = document.querySelector(`input[name="${answer.name}"]:checked`);
+                if (!selected) {
+                    allAnswered = false;
+                } else if (selected.value === answer.correct) {
+                    correctCount++;
+                }
+            });
+
+            if (!allAnswered) {
+                alert("请回答所有问题！");
+                return;
+            }
+
+            if (correctCount < answers.length) {
+                alert(`您的回答有 ${answers.length - correctCount} 个错误，请重新阅读指导语！`);
+                document.getElementById('instruction').style.display = 'block'; // 显示指导语容器
+                document.getElementById('quiz').style.display = 'none';        // 隐藏问卷容器
+                showPage(2); // 返回第一页重新阅读指导语
+                return;
+            }
+
+            // 如果所有答案正确，显示正确反馈
+            alert("回答正确，实验正式开始！");
+            document.getElementById('quiz').style.display = 'none'; // 隐藏问卷
+            startExperiment(); // 开始实验
+        }
+        
+        // 开始实验
+        function startExperiment() {
+            document.getElementById('instruction').style.display = 'none';
+            // 初始化实验
+            if (currentRound === 0) {
+                sliderContainer.style.display = "block";
+                startButton.textContent = "Confirm Allocation";
+                showJars();
+                return;
+            } else {
+
+                // 添加滑动验证
+             if (!isSliderMoved) {
+                alert("Please allocate your willingness points!");
+                return;
+                }
+
+                recordData();
+                showBlankScreen();
+            }
+        }
+
+    </script>
+</body>
+</html>
