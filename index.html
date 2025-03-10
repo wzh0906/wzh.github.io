@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <title>罐子实验</title>
     <style>
-
         body {
             font-family: "Times New Roman", "楷体", serif;
             text-align: center;
@@ -72,7 +72,7 @@
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 5px;
-            margin-top: 65px;
+            margin-top: 95px;
         }
         .ball {
             width: 28px;
@@ -301,153 +301,148 @@
     <!-- 实验指导语 -->
     
 
-   <div id="instruction" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; text-align: center; padding: 20px; overflow-y: auto;"> 
-    <div id="page1">
-        <h2>实验说明</h2>
-        <div style="max-width:800px; margin:20px auto; text-align:left">
-            <p style="font-size:1.2em; line-height:1.6">
-                欢迎参加本次实验！请认真阅读以下指导语，后续您将回答一些相关问题，如果回答正确则进入正式实验，如果回答错误需要重新阅读指导语。
-            </p>
-        </div>
-        <button onclick="showPage(2)">我同意</button>
-    </div>
-    <div id="page2" style="display:none">
-        <div style="max-width:800px; margin:20px auto; text-align:left">
-            <p style="font-size:1.2em; line-height:1.6">
-                如下图所示，您会看到两个罐子，每个罐子里装有十个球，这些球的颜色要么是<span style='color:red'>红色</span>，要么是<span style='color:blue'>蓝色</span>。但是，<span style='color:#395ca2'><strong>两个罐子中都有部分球的颜色显示为灰色，灰色的球表示球的颜色未知</strong>。
-                <img src="intro_jar.png" style="width:55%;
-                                                border:1px solid #ddd;
-                                                display: block;  
-                                                margin: 0 auto;
-                                                margin-top: 20px"> 
-            </p>
-            
-        </div>
-        <button onclick="showPage(3)" >下一页 ▶</button>
-    </div>
-    <div id="page3" style="display:none">
-        <div style="max-width:800px; margin:20px auto; text-align:left">
-            <p style="font-size:1.2em; line-height:1.6"> 
-                您将选择一个罐子进行模拟抽球游戏，系统将从所选罐子中的十个球里抽取一个。抽出球的颜色将决定您的最终报酬。面对两个信息不同的罐子，您需要根据个人偏好选择一个进行抽球游戏。<span style='color:#395ca2'><strong>实验的基础报酬为5元，如果您抽到红球，将额外获得2元，共计获得7元报酬；如果您抽到蓝球，将损失2元，共计获得3元报酬。</strong></span>
-            </p>
-            <img src="intro_reward.png" style="width:75%;
-                                                border:1px solid #ddd;
-                                                display: block;  
-                                                margin: 0 auto;
-                                                margin-top: 20px"> 
-        </div>
-        <button onclick="showPage(2)">◀ 上一页</button>
-        <button onclick="showPage(4)" style="margin-left:20px">下一页 ▶</button>
-    </div>
-    
-    <div id="page4" style="display:none">
-        <div style="max-width:800px; margin:20px auto; text-align:left">
-            <p style="font-size:1.2em; line-height:1.6"> 
-                为了了解您偏好的强烈程度，请您对100个意愿点进行分配。具体来说，<span style='color:#395ca2'><strong>分配给某个罐子的意愿点越多，代表您越倾向于选择该罐子进行抽球游戏。</strong></span>例如:<br>
-                <li style="font-size:1.2em; line-height:1.6">如果您将0个意愿点分配给罐A，而将100个意愿点分配给罐B，这表示您完全倾向于选择罐B进行抽球游戏，而不考虑罐A。<br>
-                <li style="font-size:1.2em; line-height:1.6">如果您分配给罐A和罐B各50个愿意点，则表示您对两个罐子的偏好相同。<br>
-                <li style="font-size:1.2em; line-height:1.6">如果您将80个意愿点分配给罐A，20个意愿点给罐B，则表示您更倾向于选择罐A。
-            </p>
-        </div>
-        <button onclick="showPage(3)">◀ 上一页</button>
-        <button onclick="showPage(5)" style="margin-left:20px">下一页 ▶</button>
-    </div>
-    
-    <div id="page5" style="display:none">
-        <div style="max-width:800px; margin:20px auto; text-align:left">
-        <p style="font-size:1.2em; line-height:1.6"> 
-            如下图所示，在实验中您需要拖动滑块来分配意愿点，在拖动滑块的过程中，您将看到您具体分配给罐A和罐B的意愿点。当您完成意愿点分配后，请点击“确认分配”。
-            <img src='intro_slider.png' style='width: 100%;margin-left:0%;margin-right:10%;margin-top:3%;margin-bottom:2%;border-style: ridge;'>
-            确认后，您将会看到<span style='color:#395ca2'><strong>一对新的罐子</strong></span>，游戏规则相同，请您继续分配意愿点。
-            本实验中，您需要按照以上规则对<span style='color:#395ca2'><strong>100对罐子</strong></span>分配意愿点。
-        </p>
+    <div id="instruction" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; text-align: center; padding: 20px; overflow-y: auto;"> 
+        <div id="page1">
+            <h2>Experiment Instructions</h2>
+            <div style="max-width:800px; margin:20px auto; text-align:left">
+                <p style="font-size:1.2em; line-height:1.6">
+                    Welcome to the experiment! Please read the following instructions carefully. You will answer some related questions afterward. If you answer correctly, you will proceed to the formal experiment. If you answer incorrectly, you will need to read the instructions again.
+                </p>
             </div>
-            
-
-        <button onclick="showPage(4)">◀ 上一页</button>
-        <button onclick="showPage(6)" style="margin-left:20px">下一页 ▶</button>
-       
-    </div>
-
-    <div id="page6" style="display:none">
-        <div style="max-width:800px; margin:20px auto; text-align:left">
-            <p style="font-size:1.2em; line-height:1.6"> 
-                请注意，您每次分配意愿点的结果都将被记录。实验完成后，系统将在您所有的意愿点分配记录（共计100条）中<span style='color:#395ca2'><strong>随机抽取一条</strong></span>，并依据您的意愿点分配选择相应罐子进行模拟抽球游戏，<span style='color:#395ca2'><strong>这将决定您可以获得的额外奖励</strong></span>。<br><br>
-                例如：您给罐A分配了25个意愿点，给罐B分配了75个意愿点，那么系统首先将决定使用哪个罐子抽球，选择罐A的概率为25%，选择罐B的概率为75%。
-                <span style='color:#395ca2'><strong>您最终获得的报酬与您的意愿点分配结果有关，所以请您在认真思考后做决定。</strong></span><br><br>
-                如果您已经理解该游戏，请点击“开始答题”按钮，回答问题。
-            </p>
+            <button onclick="showPage(2)">I Agree</button>
         </div>
-            
-
-        <button onclick="showPage(5)">◀ 上一页</button>
-        <button onclick="showQuiz()" style="margin-left:20px">开始答题</button>
+        <div id="page2" style="display:none">
+            <div style="max-width:800px; margin:20px auto; text-align:left">
+                <p style="font-size:1.2em; line-height:1.6">
+                    As shown in the figure below, you will see two jars, each containing 10 balls. The colors of these balls are either <span style='color:red'>red</span> or <span style='color:blue'>blue</span>. However, <span style='color:#395ca2'><strong>some balls in both jars are displayed in gray, indicating that the color of the balls is unknown</strong>.
+                    <img src="intro_jar.png" style="width:55%;
+                                                    border:1px solid #ddd;
+                                                    display: block;  
+                                                    margin: 0 auto;
+                                                    margin-top: 20px"> 
+                </p>
+            </div>
+            <button onclick="showPage(3)">Next Page ▶</button>
+        </div>
+        <div id="page3" style="display:none">
+            <div style="max-width:800px; margin:20px auto; text-align:left">
+                <p style="font-size:1.2em; line-height:1.6"> 
+                    You will choose one jar to play a simulated ball-drawing game, and the system will draw one ball from the 10 balls in the selected jar. The color of the drawn ball will determine your final reward. Faced with two jars with different information, you need to choose one based on your personal preference for the ball-drawing game.
+                    <span style='color:#395ca2'><strong>The base reward for the experiment is 5 dollars. If you draw a red ball, you will receive an additional 2 dollars, totaling 7 dollars; if you draw a blue ball, you will lose 2 dollars, totaling 3 dollars.</strong></span>
+                </p>
+                <img src="intro_reward.png" style="width:75%;
+                                                    border:1px solid #ddd;
+                                                    display: block;  
+                                                    margin: 0 auto;
+                                                    margin-top: 20px"> 
+            </div>
+            <button onclick="showPage(2)">◀ Previous Page</button>
+            <button onclick="showPage(4)" style="margin-left:20px">Next Page ▶</button>
+        </div>
+        
+        <div id="page4" style="display:none">
+            <div style="max-width:800px; margin:20px auto; text-align:left">
+                <p style="font-size:1.2em; line-height:1.6"> 
+                    To understand the strength of your preferences, please allocate 100 willingness points. Specifically, <span style='color:#395ca2'><strong>the more willingness points allocated to a jar, the more you prefer to choose that jar for the ball-drawing game.</strong></span> For example:<br>
+                    <li style="font-size:1.2em; line-height:1.6">If you allocate 0 willingness points to Jar A and 100 willingness points to Jar B, it indicates that you completely prefer Jar B for the ball-drawing game, without considering Jar A.<br>
+                    <li style="font-size:1.2em; line-height:1.6">If you allocate 50 willingness points to both Jar A and Jar B, it indicates that you have the same preference for both jars.<br>
+                    <li style="font-size:1.2em; line-height:1.6">If you allocate 80 willingness points to Jar A and 20 willingness points to Jar B, it indicates that you prefer to choose Jar A.
+                </p>
+            </div>
+            <button onclick="showPage(3)">◀ Previous Page</button>
+            <button onclick="showPage(5)" style="margin-left:20px">Next Page ▶</button>
+        </div>
+        
+        <div id="page5" style="display:none">
+            <div style="max-width:800px; margin:20px auto; text-align:left">
+            <p style="font-size:1.2em; line-height:1.6"> 
+                As shown in the figure below, during the experiment, you will need to drag a slider to allocate willingness points. While dragging the slider, you will see the specific willingness points allocated to Jar A and Jar B. After you finish allocating willingness points, please click "Confirm Allocation".
+                <img src='intro_slider.png' style='width: 100%;margin-left:0%;margin-right:10%;margin-top:3%;margin-bottom:2%;border-style: ridge;'>
+                After confirmation, you will see <span style='color:#395ca2'><strong>a new pair of jars</strong></span>, with the same game rules. Please continue to allocate willingness points.
+                In this experiment, you will need to allocate willingness points to <span style='color:#395ca2'><strong>93 pairs of jars</strong></span> according to the above rules.
+            </p>
+                </div>
+            <button onclick="showPage(4)">◀ Previous Page</button>
+            <button onclick="showPage(6)" style="margin-left:20px">Next Page ▶</button>
+        </div>
+    
+        <div id="page6" style="display:none">
+            <div style="max-width:800px; margin:20px auto; text-align:left">
+                <p style="font-size:1.2em; line-height:1.6"> 
+                    Please note that the results of your willingness point allocation will be recorded each time. After the experiment is completed, the system will <span style='color:#395ca2'><strong>randomly select one record</strong></span> from all your willingness point allocations (a total of 93 records) and use your willingness point allocation to choose the corresponding jar for the simulated ball-drawing game, <span style='color:#395ca2'><strong>which will determine the additional reward you can receive</strong></span>.<br><br>
+                    For example: If you allocate 25 willingness points to Jar A and 75 willingness points to Jar B, the system will first decide which jar to draw from, with a 25% probability of choosing Jar A and a 75% probability of choosing Jar B.
+                    <span style='color:#395ca2'><strong>Your final reward is related to your willingness point allocation results, so please make your decision carefully.</strong></span><br><br>
+                    If you understand the game, please click the "Start Answering" button to answer the questions.
+                </p>
+            </div>
+            <button onclick="showPage(5)">◀ Previous Page</button>
+            <button onclick="showQuiz()" style="margin-left:20px">Start Answering</button>
+        </div>
     </div>
-</div>
+    
 
 
     <!-- 问卷页面 -->
     <div id="quiz" class="quiz-container">
-        <h3>理解测试</h3>
+        <h3>Test</h3>
         <form id="quizForm">
-            <!-- 问题1 -->
-            <p>1. 在模拟游戏中，您会同时看到_____个罐子。</p>
-            <input type="radio" name="q1" value="1"> 1<br>
-            <input type="radio" name="q1" value="2"> 2<br>
-            <input type="radio" name="q1" value="3"> 3<br>
-            <input type="radio" name="q1" value="4"> 4<br>
+           <!-- 问题1 -->
+<p>1. In the simulation game, how many jars will you see simultaneously?</p>
+<input type="radio" name="q1" value="1"> 1<br>
+<input type="radio" name="q1" value="2"> 2<br>
+<input type="radio" name="q1" value="3"> 3<br>
+<input type="radio" name="q1" value="4"> 4<br>
 
-            <!-- 问题2 -->
-            <p>2. 罐子中的球可能有以下哪三种颜色？</p>
-            <input type="radio" name="q2" value="1"> 红色 黄色 绿色<br>
-            <input type="radio" name="q2" value="2"> 黄色 绿色 白色<br>
-            <input type="radio" name="q2" value="3"> 蓝色 灰色 黄色<br>
-            <input type="radio" name="q2" value="4"> 红色 蓝色 灰色<br>
+<!-- 问题2 -->
+<p>2. Which three colors might the balls in the jars have?</p>
+<input type="radio" name="q2" value="1"> Red, yellow, green<br>
+<input type="radio" name="q2" value="2"> Yellow, green, white<br>
+<input type="radio" name="q2" value="3"> Blue, gray, yellow<br>
+<input type="radio" name="q2" value="4"> Red, blue, gray<br>
 
-            <!-- 问题3 -->
-            <p>3. 抽到红色的球能会获得额外____，抽到蓝色的球会获得额外____。</p>
-            <input type="radio" name="q3" value="1"> 收益 损失<br>
-            <input type="radio" name="q3" value="2"> 损失 收益<br>
-            <input type="radio" name="q3" value="3"> 收益 收益<br>
-            <input type="radio" name="q3" value="4"> 损失 损失<br>
+<!-- 问题3 -->
+<p>3. Drawing a red ball will yield an additional ____, and drawing a blue ball will result in an additional ____.</p>
+<input type="radio" name="q3" value="1"> Gain, Loss<br>
+<input type="radio" name="q3" value="2"> Loss, Gain<br>
+<input type="radio" name="q3" value="3"> Gain, Gain<br>
+<input type="radio" name="q3" value="4"> Loss, Loss<br>
 
-            <!-- 问题4 -->
-            <p>4. 分配意愿点时，以下说法正确的是：</p>
-            <input type="radio" name="q4" value="1"> 两个罐子里所有球的颜色都未知<br>
-            <input type="radio" name="q4" value="2"> 有一个罐子里所有球的颜色已知<br>
-            <input type="radio" name="q4" value="3"> 两个罐子都有部分球的颜色未知<br>
-            <input type="radio" name="q4" value="4"> 两个罐子里所有球的颜色都已知<br>
+<!-- 问题4 -->
+<p>4. When allocating willingness points, which of the following statements is correct?</p>
+<input type="radio" name="q4" value="1"> The colors of all the balls in both jars are unknown.<br>
+<input type="radio" name="q4" value="2"> The colors of all the balls in one jar are known.<br>
+<input type="radio" name="q4" value="3"> The colors of some balls in both jars are unknown.<br>
+<input type="radio" name="q4" value="4"> The colors of all the balls in both jars are known.<br>
 
-            <!-- 问题5 -->
-            <p>5. 小明在一个试次中分配给A罐90个意愿点，给B罐10个意愿点，这表示：</p>
-            <input type="radio" name="q5" value="1"> 小明强烈偏好A罐<br>
-            <input type="radio" name="q5" value="2"> 小明略微偏好A罐<br>
-            <input type="radio" name="q5" value="3"> 小明略微偏好B罐<br>
-            <input type="radio" name="q5" value="4"> 小明强烈偏好B罐<br>
+<!-- 问题5 -->
+<p>5. Jack allocated 90 willingness points to Jar A and 10 willingness points to Jar B in a trial. What does this indicate?</p>
+<input type="radio" name="q5" value="1"> Jack has a strong preference for Jar A.<br>
+<input type="radio" name="q5" value="2"> Jack has a slight preference for Jar A.<br>
+<input type="radio" name="q5" value="3"> Jack has a slight preference for Jar B.<br>
+<input type="radio" name="q5" value="4"> Jack has a strong preference for Jar B.<br>
 
-            <!-- 问题6 -->
-            <p>6. 如图，如果根据该记录结算额外报酬，抽到A罐结算的概率为____。在抽到A罐的基础上，额外获得2元的概率为____：</p>
-            <img src='question.png' style='width: 100%;margin-left:0%;margin-right:10%;margin-top:3%;margin-bottom:2%;border-style: ridge;'>
-            <input type="radio" name="q6" value="1"> 90%, 20%<br>
-            <input type="radio" name="q6" value="2"> 10%, 20%<br>
-            <input type="radio" name="q6" value="3"> 90%, 无法确定<br>
-            <input type="radio" name="q6" value="4"> 10%, 无法确定<br>
+<!-- 问题6 -->
+<p>6. As shown in the figure, if the additional reward is settled based on this record, what is the probability of settling from Jar A? And given that a ball is drawn from Jar A, what is the probability of getting +2$?</p>
+<img src='question.png' style='width: 100%;margin-left:0%;margin-right:10%;margin-top:3%;margin-bottom:2%;border-style: ridge;'>
+<input type="radio" name="q6" value="1"> 90%, 10%<br>
+<input type="radio" name="q6" value="2"> 10%, 10%<br>
+<input type="radio" name="q6" value="3"> 90%, Unable to determine<br>
+<input type="radio" name="q6" value="4"> 10%, Unable to determine<br>
 
 
-           
         </form>
-        <button onclick="checkQuiz()">提交答案</button>
+        <button onclick="checkQuiz()">Submit Answer</button>
     </div>
 
     <!-- 实验内容 -->
     <div class="reward-info">
         <div>
             <div style="width: 20px; height: 20px; background-color: red; border-radius: 50%;"></div>
-            <span>=+2yuan</span>
+            <span>=+2$</span>
         </div>
         <div>
             <div style="width: 20px; height: 20px; background-color: blue; border-radius: 50%;"></div>
-            <span>=-2yuan</span>
+            <span>=-2$</span>
         </div>
     </div>
     <div class="container">
@@ -486,60 +481,69 @@
 
     <!-- 奖励结果展示 -->
     <div id="rewardResult" class="reward-result" style="display: none;">
-        <h2>🎉 Ball Draw Result 🎉</h2>
-        
-        <div class="phase-container">
-            <div class="phase-title">▎Round Draw</div>
-            <p>Round <span id="selectedRoundText" class="highlight"></span> has been randomly selected by the system from all allocated trials. </p>
-        </div>
-
-        <div class="phase-container">
-            <div class="phase-title">▎The state of the two jars at that moment</div>
-            
-            <div class="comparison-jars">
-                <div class="jar-group">
-                   
-                    <div id="originalJarA"></div>
-                </div>
-                <div class="jar-group">
-                    
-                    <div id="originalJarB"></div>
-                </div>
-            </div>
-            <p>Your willingness points were allocated as follows: JarA  <span id="originalJarAPercent" class="highlight"></span>  JarB  <span id="originalJarBPercent" class="highlight"></span>.</p>
-        </div>
-
-        <div class="phase-container">
-            <div class="phase-title">▎The actual selection process</div>
-            <p>Based on the allocation ratio of your willingness points, the system randomly selected <span id="selectedJarExplanation" class="highlight"></span>.</p>
-            
+        <!-- 第1页：选择轮次 -->
+        <div id="rewardPage1">
+            <h2>🎉 Ball Draw Result 🎉</h2>
             <div class="phase-container">
-                <div class="phase-title">▎The actual state of the two jars</div>
-               
+                <div class="phase-title">▎Round Draw</div>
+                <p>Round <span id="selectedRoundText" class="highlight"></span> has been randomly selected by the system from all allocated trials. </p>
+            </div>
+            <button onclick="showRewardPage(2)">Continue ▶</button>
+        </div>
+    
+        <!-- 第2页：罐子状态 -->
+        <div id="rewardPage2" style="display:none">
+            <div class="phase-container">
+                <div class="phase-title">▎Jar Draw</div>
+                <p>Your willingness points were allocated as follows: JarA  <span id="originalJarAPercent" class="highlight"></span>,JarB  <span id="originalJarBPercent" class="highlight"></span>.</p>
+                <p>Based on the allocation ratio of your willingness points, the system randomly selected:</p>
                 <div class="comparison-jars">
                     <div class="jar-group">
-                        
-                        <div id="resultJarA"></div>
+                        <div id="originalJarA"></div>
                     </div>
                     <div class="jar-group">
-                       
-                        <div id="resultJarB"></div>
+                        <div id="originalJarB"></div>
                     </div>
                 </div>
             </div>
-
-            <p>The color of the ball randomly drawn from <span id="selectedJarName" class="highlight"></span> by the system is <span id="ballColorExplanation" class="highlight"></span>,
-            which means your reward will be <span id="rewardExplanation" class="highlight"></span> yuan.
-            </p>
+            <button onclick="showRewardPage(3)">Continue ▶</button>
         </div>
-
-        <button id="closeResult">End the Experiment</button>
+    
+        <!-- 第3页：罐子的实际状态 -->
+        <div id="rewardPage3" style="display:none">
+            <div class="phase-container">
+                <div class="phase-title">▎The actual state of <span id="selectedJarExplanation" class="highlight"></span></div>
+                <div id="resultJar" style="width: 200px; height: 200px; position: relative;"></div>
+            </div>
+            <button onclick="showRewardPage(4)">Continue ▶</button>
+        </div>
+    
+        <!-- 第4页：球的抽取 -->
+        <div id="rewardPage4" style="display:none">
+            <div class="phase-container">
+                <div class="phase-title">▎Ball Draw</div>
+                <div id="drawBallJar" style="width: 200px; height: 200px; margin: 0 auto; position: relative;"></div>
+                <div id="ballAnimation" style="position: absolute; width: 20px; height: 20px; border-radius: 50%; display: none;"></div>
+            </div>
+            <button onclick="showRewardPage(5)">Continue ▶</button>
+        </div>
+    
+        <!-- 第5页：最终结果 -->
+       
+<div id="rewardPage5" style="display:none">
+    <div class="phase-container">
+        <div class="phase-title">▎Reward Result</div>
+        <p>The color of the ball randomly drawn from <span id="selectedJarName" class="highlight"></span> by the system is <span id="ballColorExplanation" class="highlight"></span>,
+            which means your reward will <span id="rewardExplanation" class="highlight"></span> dollars.</p>
+            <p>Your final reward is : <span id="finalReward" class="highlight"></span> dollars.</p>
     </div>
+    <button id="closeResult">End the Experiment</button>
+</div>
 
     <script>
         const jarA = document.getElementById('jarA');
         const jarB = document.getElementById('jarB');
-        const totalRounds = 3;
+        const totalRounds = 93; // 实验总轮次
         let currentRound = 0;
         let isSliderMoved = false;
         const experimentData = [];
@@ -591,226 +595,313 @@
             }, 500);
         }
 
+        // 预定义的罐子配置 (替换为你从 Excel 转换的 JavaScript 数组)
+        const predefinedConfigurations = [
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 2, blue: 0 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 1, blue: 1 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 3, blue: 0 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 2, blue: 1 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 4, blue: 0 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 3, blue: 1 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 2, blue: 2 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 5, blue: 0 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 4, blue: 1 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 3, blue: 2 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 6, blue: 0 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 5, blue: 1 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 4, blue: 2 } },
+            { jarA: { red: 1, blue: 0 }, jarB: { red: 3, blue: 3 } },
+            { jarA: { red: 2, blue: 0 }, jarB: { red: 3, blue: 0 } },
+            { jarA: { red: 2, blue: 0 }, jarB: { red: 2, blue: 1 } },
+            { jarA: { red: 1, blue: 1 }, jarB: { red: 3, blue: 0 } },
+            { jarA: { red: 1, blue: 1 }, jarB: { red: 2, blue: 1 } },
+            { jarA: { red: 2, blue: 0 }, jarB: { red: 4, blue: 0 } },
+            { jarA: { red: 2, blue: 0 }, jarB: { red: 3, blue: 1 } },
+            { jarA: { red: 2, blue: 0 }, jarB: { red: 2, blue: 2 } },
+            { jarA: { red: 1, blue: 1 }, jarB: { red: 4, blue: 0 } },
+            { jarA: { red: 1, blue: 1 }, jarB: { red: 3, blue: 1 } },
+            { jarA: { red: 1, blue: 1 }, jarB: { red: 2, blue: 2 } },
+            { jarA: { red: 2, blue: 0 }, jarB: { red: 5, blue: 0 } },
+            { jarA: { red: 2, blue: 0 }, jarB: { red: 4, blue: 1 } },
+            { jarA: { red: 2, blue: 0 }, jarB: { red: 3, blue: 2 } },
+            { jarA: { red: 1, blue: 1 }, jarB: { red: 5, blue: 0 } },
+            { jarA: { red: 1, blue: 1 }, jarB: { red: 4, blue: 1 } },
+            { jarA: { red: 1, blue: 1 }, jarB: { red: 3, blue: 2 } },
+            { jarA: { red: 2, blue: 0 }, jarB: { red: 6, blue: 0 } },
+            { jarA: { red: 2, blue: 0 }, jarB: { red: 5, blue: 1 } },
+            { jarA: { red: 2, blue: 0 }, jarB: { red: 4, blue: 2 } },
+            { jarA: { red: 2, blue: 0 }, jarB: { red: 3, blue: 3 } },
+            { jarA: { red: 1, blue: 1 }, jarB: { red: 6, blue: 0 } },
+            { jarA: { red: 1, blue: 1 }, jarB: { red: 5, blue: 1 } },
+            { jarA: { red: 1, blue: 1 }, jarB: { red: 4, blue: 2 } },
+            { jarA: { red: 1, blue: 1 }, jarB: { red: 3, blue: 3 } },
+            { jarA: { red: 3, blue: 0 }, jarB: { red: 4, blue: 0 } },
+            { jarA: { red: 3, blue: 0 }, jarB: { red: 3, blue: 1 } },
+            { jarA: { red: 3, blue: 0 }, jarB: { red: 2, blue: 2 } },
+            { jarA: { red: 2, blue: 1 }, jarB: { red: 4, blue: 0 } },
+            { jarA: { red: 2, blue: 1 }, jarB: { red: 3, blue: 1 } },
+            { jarA: { red: 2, blue: 1 }, jarB: { red: 2, blue: 2 } },
+            { jarA: { red: 3, blue: 0 }, jarB: { red: 5, blue: 0 } },
+            { jarA: { red: 3, blue: 0 }, jarB: { red: 4, blue: 1 } },
+            { jarA: { red: 3, blue: 0 }, jarB: { red: 3, blue: 2 } },
+            { jarA: { red: 2, blue: 1 }, jarB: { red: 5, blue: 0 } },
+            { jarA: { red: 2, blue: 1 }, jarB: { red: 4, blue: 1 } },
+            { jarA: { red: 2, blue: 1 }, jarB: { red: 3, blue: 2 } },
+            { jarA: { red: 3, blue: 0 }, jarB: { red: 6, blue: 0 } },
+            { jarA: { red: 3, blue: 0 }, jarB: { red: 5, blue: 1 } },
+            { jarA: { red: 3, blue: 0 }, jarB: { red: 4, blue: 2 } },
+            { jarA: { red: 3, blue: 0 }, jarB: { red: 3, blue: 3 } },
+            { jarA: { red: 2, blue: 1 }, jarB: { red: 6, blue: 0 } },
+            { jarA: { red: 2, blue: 1 }, jarB: { red: 5, blue: 1 } },
+            { jarA: { red: 2, blue: 1 }, jarB: { red: 4, blue: 2 } },
+            { jarA: { red: 2, blue: 1 }, jarB: { red: 3, blue: 3 } },
+            { jarA: { red: 4, blue: 0 }, jarB: { red: 5, blue: 0 } },
+            { jarA: { red: 4, blue: 0 }, jarB: { red: 4, blue: 1 } },
+            { jarA: { red: 4, blue: 0 }, jarB: { red: 3, blue: 2 } },
+            { jarA: { red: 3, blue: 1 }, jarB: { red: 5, blue: 0 } },
+            { jarA: { red: 3, blue: 1 }, jarB: { red: 4, blue: 1 } },
+            { jarA: { red: 3, blue: 1 }, jarB: { red: 3, blue: 2 } },
+            { jarA: { red: 2, blue: 2 }, jarB: { red: 5, blue: 0 } },
+            { jarA: { red: 2, blue: 2 }, jarB: { red: 4, blue: 1 } },
+            { jarA: { red: 2, blue: 2 }, jarB: { red: 3, blue: 2 } },
+            { jarA: { red: 4, blue: 0 }, jarB: { red: 6, blue: 0 } },
+            { jarA: { red: 4, blue: 0 }, jarB: { red: 5, blue: 1 } },
+            { jarA: { red: 4, blue: 0 }, jarB: { red: 4, blue: 2 } },
+            { jarA: { red: 4, blue: 0 }, jarB: { red: 3, blue: 3 } },
+            { jarA: { red: 3, blue: 1 }, jarB: { red: 6, blue: 0 } },
+            { jarA: { red: 3, blue: 1 }, jarB: { red: 5, blue: 1 } },
+            { jarA: { red: 3, blue: 1 }, jarB: { red: 4, blue: 2 } },
+            { jarA: { red: 2, blue: 2 }, jarB: { red: 3, blue: 3 } },
+            { jarA: { red: 3, blue: 1 }, jarB: { red: 6, blue: 1 } },
+            { jarA: { red: 3, blue: 1 }, jarB: { red: 5, blue: 2 } },
+            { jarA: { red: 3, blue: 1 }, jarB: { red: 4, blue: 3 } },
+            { jarA: { red: 2, blue: 2 }, jarB: { red: 6, blue: 1 } },
+            { jarA: { red: 2, blue: 2 }, jarB: { red: 5, blue: 2 } },
+            { jarA: { red: 2, blue: 2 }, jarB: { red: 4, blue: 3 } },
+            { jarA: { red: 5, blue: 0 }, jarB: { red: 6, blue: 0 } },
+            { jarA: { red: 5, blue: 0 }, jarB: { red: 5, blue: 1 } },
+            { jarA: { red: 5, blue: 0 }, jarB: { red: 4, blue: 2 } },
+            { jarA: { red: 4, blue: 1 }, jarB: { red: 6, blue: 0 } },
+            { jarA: { red: 4, blue: 1 }, jarB: { red: 5, blue: 1 } },
+            { jarA: { red: 4, blue: 1 }, jarB: { red: 4, blue: 2 } },
+            { jarA: { red: 3, blue: 2 }, jarB: { red: 6, blue: 0 } },
+            { jarA: { red: 3, blue: 2 }, jarB: { red: 5, blue: 1 } },
+            { jarA: { red: 3, blue: 2 }, jarB: { red: 4, blue: 2 } },
+            { jarA: { red: 3, blue: 2 }, jarB: { red: 3, blue: 3 } },
+           
+        ];
+
+        let usedConfigurationIndices = []; // 存储已使用的配置索引
+
+        function getRandomConfigurationIndex() {
+            if (usedConfigurationIndices.length === predefinedConfigurations.length) {
+                // 如果所有配置都已使用，则重置已使用配置的列表
+                usedConfigurationIndices = [];
+            }
+
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * predefinedConfigurations.length);
+            } while (usedConfigurationIndices.includes(randomIndex));
+
+            usedConfigurationIndices.push(randomIndex);
+            return randomIndex;
+        }
+
         function showJars() {
-            currentRound++;
-            document.getElementById("roundInfo").textContent = "Please adjust the slider to allocate 100 willingness points between the 2 jars based on how willing you are to choose each one.";
+    currentRound++;
+    let jarAConfig, jarBConfig;
 
-            const ballsA = generateBallsA();
-            const ballsB = generateBallsB(ballsA.greyCount);
-
-            document.getElementById("jarA").innerHTML = generateJar('A', ballsA.balls, currentRound);
-            document.getElementById("jarB").innerHTML = generateJar('B', ballsB.balls, currentRound);
-
-            sliderA.value = 50;
-            sliderB.value = 50;
-            sliderAValue.textContent = 50;
-            sliderBValue.textContent = 50;
-
-            experimentData.push({
-                round: currentRound,
-                jarAValue: 50,
-                jarBValue: 50,
-                redCountA: ballsA.redCount,
-                blueCountA: ballsA.blueCount,
-                redCountB: ballsB.redCount,
-                blueCountB: ballsB.blueCount
-            });
+    // 注意力检测试次逻辑
+    if (currentRound === Math.floor(totalRounds/3) || 
+        currentRound === Math.floor(totalRounds*2/3)) {
+        // 第一个检测试次：A全红，B全蓝
+        if (currentRound === Math.floor(totalRounds/3)) {
+            jarAConfig = { red: 10, blue: 0, type: "attention-check" };
+            jarBConfig = { red: 0, blue: 10, type: "attention-check" };
         }
-
-        function recordData() {
-            experimentData[currentRound - 1].jarAValue = parseInt(sliderA.value);
-            experimentData[currentRound - 1].jarBValue = parseInt(sliderB.value);
-            if (currentRound === totalRounds) exportToExcel();
+        // 第二个检测试次：A全蓝，B全红
+        else {
+            jarAConfig = { red: 0, blue: 10, type: "attention-check" };
+            jarBConfig = { red: 10, blue: 0, type: "attention-check" };
         }
+    } 
+    else {
+        // 常规试次逻辑
+        const randomIndex = getRandomConfigurationIndex();
+        const configuration = predefinedConfigurations[randomIndex];
+        jarAConfig = { ...configuration.jarA, type: "normal" };
+        jarBConfig = { ...configuration.jarB, type: "normal" };
+    }
 
-        function exportToExcel() {
-            const wsData = [
-                ["轮次", "罐A意愿点", "罐B意愿点", "罐A红球数", "罐A蓝球数", "罐B红球数", "罐B蓝球数"],
-                ...experimentData.map(data => [
-                    data.round,
-                    data.jarAValue,
-                    data.jarBValue,
-                    data.redCountA,
-                    data.blueCountA,
-                    data.redCountB,
-                    data.blueCountB
-                ])
-            ];
-            const ws = XLSX.utils.aoa_to_sheet(wsData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "实验数据");
-            XLSX.writeFile(wb, "实验数据.xlsx");
+    // 显示罐子
+    displayJar(jarA, jarAConfig, "Jar A");
+    displayJar(jarB, jarBConfig, "Jar B");
+
+    // 重置滑块
+    sliderA.value = 50;
+    sliderB.value = 50;
+    sliderAValue.textContent = 50;
+    sliderBValue.textContent = 50;
+}
+
+        
+
+    function displayJar(jarElement, config, jarName) {
+    jarElement.innerHTML = ''; // 清空之前的内容
+    
+    // 添加罐子名称标签
+    const jarLabel = document.createElement('div');
+    jarLabel.textContent = jarName;
+    jarLabel.style.textAlign = 'center';
+    jarLabel.style.marginBottom = '10px';
+    jarLabel.style.fontWeight = 'bold';
+    jarLabel.style.marginTop = '-20px'; 
+    jarElement.appendChild(jarLabel);
+
+    const ballContainer = document.createElement('div');
+    ballContainer.className = 'ball-container';
+    ballContainer.style.display = 'grid';
+    ballContainer.style.gridTemplateColumns = 'repeat(5, 1fr)'; // 每行5个
+    ballContainer.style.gridTemplateRows = 'repeat(2, 1fr)';    // 共2行
+    ballContainer.style.gap = '3px'; // 球之间的间距
+    ballContainer.style.width = '80%';
+    ballContainer.style.padding = '10px'; // 容器内边距
+    ballContainer.style.position = 'relative';
+    ballContainer.style.top = '-10px'; // 整体向上移动
+    ballContainer.style.left = '10px'; // 整体向右移动
+
+    let balls = [];
+    for (let i = 0; i < config.red; i++) {
+        balls.push('red');
+    }
+    for (let i = 0; i < config.blue; i++) {
+        balls.push('blue');
+    }
+    while (balls.length < 10) {
+        balls.push('grey'); // 使用'grey'表示未知
+    }
+
+    balls.forEach(color => {
+        const ball = document.createElement('div');
+        ball.className = 'ball ' + color;
+        ballContainer.appendChild(ball);
+    });
+
+    jarElement.appendChild(ballContainer);
+    jarElement.style.position = 'relative';
+    jarElement.style.width = '200px';
+    jarElement.style.height = '200px';
+    jarElement.style.marginLeft = '10px';
+    jarElement.style.marginRight = '10px';
+    jarElement.style.marginTop = '20px';
+    jarElement.style.backgroundImage = "url('罐子.png')";
+    jarElement.style.backgroundSize = '100% 100%';
+    jarElement.style.backgroundRepeat = 'no-repeat';
+}
+
+function recordData() {
+    const currentConfig = predefinedConfigurations[usedConfigurationIndices[usedConfigurationIndices.length - 1]];
+    // 判断是否为注意力检测轮次
+    const isAttentionCheck = currentRound === Math.floor(totalRounds/3) || 
+                            currentRound === Math.floor(totalRounds*2/3);
+
+    // 判断注意力检测是否通过
+    let isAttentionCheckPassed = false;
+    if (isAttentionCheck) {
+        const jarAConfig = isAttentionCheck ? (currentRound === Math.floor(totalRounds/3) ? { red: 10, blue: 0 } : { red: 0, blue: 10 }) : currentConfig.jarA;
+        const jarBConfig = isAttentionCheck ? (currentRound === Math.floor(totalRounds/3) ? { red: 0, blue: 10 } : { red: 10, blue: 0 }) : currentConfig.jarB;
+        
+        // 判断滑块值是否符合预期
+        if (currentRound === Math.floor(totalRounds/3)) {
+            isAttentionCheckPassed = sliderA.value >= 90; // 第一个注意力检测轮次，A罐应为全红
+        } else {
+            isAttentionCheckPassed = sliderB.value >= 90; // 第二个注意力检测轮次，B罐应为全红
         }
+    }
 
-        function generateBallsA() {
-            const greyCount = Math.floor(Math.random() * 4) + 5;
-            const remaining = 10 - greyCount;
-            let redCount = Math.floor(Math.random() * (remaining + 1));
-            let blueCount = remaining - redCount;
-            
-            while(blueCount > redCount) {
-                redCount = Math.floor(Math.random() * (remaining + 1));
-                blueCount = remaining - redCount;
-            }
-            
-            return {
-                balls: [...Array(redCount).fill('red'), ...Array(blueCount).fill('blue'), ...Array(greyCount).fill('grey')],
-                redCount,
-                blueCount,
-                greyCount
-            };
-        }
+    experimentData.push({
+        round: currentRound,
+        jarA: {
+            red: isAttentionCheck ? (currentRound === Math.floor(totalRounds/3) ? 10 : 0) : currentConfig.jarA.red,
+            blue: isAttentionCheck ? (currentRound === Math.floor(totalRounds/3) ? 0 : 10) : currentConfig.jarA.blue
+        },
+        jarB: {
+            red: isAttentionCheck ? (currentRound === Math.floor(totalRounds/3) ? 0 : 10) : currentConfig.jarB.red,
+            blue: isAttentionCheck ? (currentRound === Math.floor(totalRounds/3) ? 10 : 0) : currentConfig.jarB.blue
+        },
+        sliderAValue: parseInt(sliderA.value),
+        sliderBValue: parseInt(sliderB.value),
+        isAttentionCheck: isAttentionCheck,
+        isAttentionCheckPassed: isAttentionCheckPassed // 新增：记录注意力检测是否通过
+    });
+}
 
-        function generateBallsB(maxGrey) {
-            const greyCount = Math.floor(Math.random() * (maxGrey - 4)) + 4;
-            const remaining = 10 - greyCount;
-            let redCount = Math.floor(Math.random() * (remaining + 1));
-            let blueCount = remaining - redCount;
-            
-            while(blueCount > redCount) {
-                redCount = Math.floor(Math.random() * (remaining + 1));
-                blueCount = remaining - redCount;
-            }
-            
-            return {
-                balls: [...Array(redCount).fill('red'), ...Array(blueCount).fill('blue'), ...Array(greyCount).fill('grey')],
-                redCount,
-                blueCount,
-                greyCount
-            };
-        }
 
-        function generateJar(jarType, balls) {
-            return `
-                <div class="jar-contain">
-                    <div><strong>Jar${jarType}</strong></div>
-                    <div class="jar">
-                        <div class="ball-container">
-                            ${balls.map(color => `<div class="ball ${color}"></div>`).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
+function exportToExcel() {
+    // 准备数据
+    const wsData = [
+        ["轮次", "罐A意愿点", "罐B意愿点", "罐A红球数", "罐A蓝球数", "罐B红球数", "罐B蓝球数", "是否为注意力检测", "注意力检测是否通过"],
+        ...experimentData.map(data => [
+            data.round,
+            data.sliderAValue,
+            data.sliderBValue,
+            data.jarA.red,
+            data.jarA.blue,
+            data.jarB.red,
+            data.jarB.blue,
+            data.isAttentionCheck ? "是" : "否",
+            data.isAttentionCheck ? (data.isAttentionCheckPassed ? "通过" : "未通过") : "N/A" // 新增：注意力检测结果
+        ])
+    ];
 
-        function calculateAndDisplayReward() {
-            // 隐藏其他界面元素
-            document.querySelector('.container').style.display = 'none';
-            document.getElementById('roundInfo').style.display = 'none';
-            sliderContainer.style.display = 'none';
-            startButton.style.display = 'none';
-            blankScreen.style.display = 'none';
+    // 创建工作表
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
 
-            // 随机选择试次
-            const selectedTrial = experimentData[Math.floor(Math.random() * experimentData.length)];
+    // 创建工作簿
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "实验数据");
 
-            // 生成原始罐子显示（分配时的状态）
-            const originalBallsA = [
-                ...Array(selectedTrial.redCountA).fill('red'),
-                ...Array(selectedTrial.blueCountA).fill('blue'),
-                ...Array(10 - selectedTrial.redCountA - selectedTrial.blueCountA).fill('grey')
-            ];
-            
-            const originalBallsB = [
-                ...Array(selectedTrial.redCountB).fill('red'),
-                ...Array(selectedTrial.blueCountB).fill('blue'),
-                ...Array(10 - selectedTrial.redCountB - selectedTrial.blueCountB).fill('grey')
-            ];
+    // 导出 Excel 文件
+    XLSX.writeFile(wb, "实验数据.xlsx");
+}
 
-            // 显示原始罐子
-            document.getElementById('originalJarA').innerHTML = generateJar('A', originalBallsA);
-            document.getElementById('originalJarB').innerHTML = generateJar('B', originalBallsB);
 
-            // 生成实际抽取罐子（替换灰球）
-           const actualBallsA = [
-                ...Array(selectedTrial.redCountA).fill('red'),
-                ...Array(selectedTrial.blueCountA).fill('blue'),
-                ...Array(10 - selectedTrial.redCountA - selectedTrial.blueCountA)
-                    .fill().map(() => Math.random() < 0.5 ? 'red' : 'blue')
-            ]
+         // 开始实验
+         function startExperiment() {
+            document.getElementById('instruction').style.display = 'none';
+            // 初始化实验
+            if (currentRound === 0) {
+                sliderContainer.style.display = "block";
+                startButton.textContent = "Confirm Allocation";
+                showJars();
+                return;
+            } else {
 
-            const actualBallsB = [
-                ...Array(selectedTrial.redCountB).fill('red'),
-                ...Array(selectedTrial.blueCountB).fill('blue'),
-                ...Array(10 - selectedTrial.redCountB - selectedTrial.blueCountB)
-                    .fill().map(() => Math.random() < 0.5 ? 'red' : 'blue')
-            ]
-            
-            // 显示实际罐子
-            document.getElementById('resultJarA').innerHTML = generateJar('A', actualBallsA);
-            document.getElementById('resultJarB').innerHTML = generateJar('B', actualBallsB);
-
-            // 执行抽取逻辑
-            const total = selectedTrial.jarAValue + selectedTrial.jarBValue;
-            const selectedJar = Math.random() * total < selectedTrial.jarAValue ? 'A' : 'B';
-            const selectedBalls = selectedJar === 'A' ? actualBallsA : actualBallsB;
-            const randomBall = selectedBalls[Math.floor(Math.random() * 10)];
-
-            // 填充所有文本信息
-            document.getElementById('selectedRoundText').textContent = selectedTrial.round;
-            document.getElementById('originalJarAPercent').textContent = selectedTrial.jarAValue;
-            document.getElementById('originalJarBPercent').textContent = selectedTrial.jarBValue;
-            document.getElementById('selectedJarExplanation').textContent = `Jar ${selectedJar}`;
-            document.getElementById('selectedJarName').textContent = `Jar ${selectedJar}`;
-            document.getElementById('ballColorExplanation').textContent = randomBall === 'red' ? 'red' : 'blue';
-            document.getElementById('rewardExplanation').textContent = randomBall === 'red' ? '+2' : '-2';
-            // 设置球颜色文字的颜色
-            const ballColorSpan = document.getElementById('ballColorExplanation');
-            ballColorSpan.style.color = randomBall === 'red' ? 'red' : 'blue';
-            // 设置报酬文字的颜色
-            const rewardSpan = document.getElementById('rewardExplanation');
-            rewardSpan.style.color = randomBall === 'red' ? 'red' : 'blue';
-            // 显示结果界面
-            document.getElementById('rewardResult').style.display = 'block';
-        }
-
-        document.getElementById('closeResult').addEventListener('click', () => {
-            document.getElementById('rewardResult').style.display = 'none';
-            showEndScreen();
-        });
-
-         // 显示实验结束界面
-         function showEndScreen() {
-            blankScreen.textContent = "Thank you for being part of this study! You can press the spacebar to exit now, or the system will close in 10 seconds.";
-            blankScreen.style.display = "flex";
-
-            // 监听空格键按下事件
-            document.addEventListener("keydown", function(event) {
-                if (event.code === "Space") {
-                    window.close();
+                // 添加滑动验证
+             if (!isSliderMoved) {
+                alert("Please allocate your willingness points!");
+                return;
                 }
-            });
 
-            // 10秒后自动退出
-            setTimeout(() => {
-                window.close();
-            }, 10000);
-        }
-
-        // 指导语页面切换
-        function showPage(pageNumber) {
-            for (let i = 1; i <= 6; i++) {
-                document.getElementById(`page${i}`).style.display = 'none';
+                recordData();
+                showBlankScreen();
             }
-            document.getElementById(`page${pageNumber}`).style.display = 'block';
-        
-        } 
-        
-        // 显示问卷页面
+        }
+
         function showQuiz() {
-            document.getElementById('instruction').style.display = 'none'; // 隐藏指导语
-            document.getElementById('quiz').style.display = 'block'; // 显示问卷
-            resetQuiz(); // 清空之前的答案
-        }
+            // 隐藏指导语
+            document.getElementById('instruction').style.display = 'none';
+            // 显示问卷
+            document.getElementById('quiz').style.display = 'block';
 
-        // 清空问卷答案
-        function resetQuiz() {
-            const form = document.getElementById('quizForm');
-            const inputs = form.querySelectorAll('input[type="radio"]');
-            inputs.forEach(input => (input.checked = false)); // 清空所有选项
+            // 定位到第一个问题
+            const firstQuestion = document.querySelector('input[name="q1"]');
+            if (firstQuestion) {
+            firstQuestion.focus();
         }
+    }
 
-        // 检查问卷答案
         function checkQuiz() {
             const answers = [
                 { name: 'q1', correct: '2' },
@@ -834,46 +925,305 @@
             });
 
             if (!allAnswered) {
-                alert("请回答所有问题！");
+                alert("Please answer all questions!");
                 return;
             }
 
             if (correctCount < answers.length) {
-                alert(`您的回答有 ${answers.length - correctCount} 个错误，请重新阅读指导语！`);
+                alert(`There is ${answers.length - correctCount} error in your answer.Please read the instructions again!`);
                 document.getElementById('instruction').style.display = 'block'; // 显示指导语容器
                 document.getElementById('quiz').style.display = 'none';        // 隐藏问卷容器
+
+                // 清空所有已选择的答案
+                const radioButtons = document.querySelectorAll('input[type="radio"]');
+                radioButtons.forEach(radio => {
+                    radio.checked = false;
+                });
+
                 showPage(2); // 返回第一页重新阅读指导语
                 return;
             }
 
             // 如果所有答案正确，显示正确反馈
-            alert("回答正确，实验正式开始！");
+            alert("Answer correct, the experiment officially begins!");
             document.getElementById('quiz').style.display = 'none'; // 隐藏问卷
             startExperiment(); // 开始实验
         }
         
-        // 开始实验
-        function startExperiment() {
-            document.getElementById('instruction').style.display = 'none';
-            // 初始化实验
-            if (currentRound === 0) {
-                sliderContainer.style.display = "block";
-                startButton.textContent = "Confirm Allocation";
-                showJars();
-                return;
-            } else {
-
-                // 添加滑动验证
-             if (!isSliderMoved) {
-                alert("Please allocate your willingness points!");
-                return;
-                }
-
-                recordData();
-                showBlankScreen();
+        function showPage(pageNumber) {
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`page${i}`).style.display = 'none';
             }
+            document.getElementById(`page${pageNumber}`).style.display = 'block';
+        
+        } 
+
+                // 添加页面切换函数
+                function showRewardPage(pageNumber) {
+    for (let i = 1; i <= 5; i++) {
+        document.getElementById(`rewardPage${i}`).style.display = 'none';     
+    }
+    
+    if (pageNumber === 2) {
+        showSelectionAnimation();
+    }
+    // 如果是第4页，显示抽球动画
+    if (pageNumber === 4) {
+        showDrawBallAnimation();
+    }
+    // 如果是第5页，确保显示正确的球颜色
+    if (pageNumber === 5) {
+        const ballColor = window.selectedBallColor || 'blue'; // 默认值
+        document.getElementById("ballColorExplanation").textContent = ballColor;
+        document.getElementById("rewardExplanation").textContent = 
+            ballColor === "red" ? "+2" : "-2";
+            const reward = ballColor === "red" ? 7 : 3; // 根据球颜色计算最终报酬
+            document.getElementById("finalReward").textContent = reward;
+    }
+    
+    document.getElementById(`rewardPage${pageNumber}`).style.display = 'block';
+}
+             
+            
+function showDrawBallAnimation() {
+    // 获取第三页的罐子元素
+    const resultJar = document.getElementById('resultJar');
+    
+    // 克隆第三页的罐子到第四页
+    const drawBallJar = document.getElementById('drawBallJar');
+    drawBallJar.innerHTML = resultJar.innerHTML;
+
+    // 添加背景图片样式
+    drawBallJar.style.backgroundImage = "url('罐子.png')";
+    drawBallJar.style.backgroundSize = '100% 100%';
+    drawBallJar.style.backgroundRepeat = 'no-repeat';
+    drawBallJar.style.marginTop = '50px'; // 新增：使罐子整体下移
+
+    // 获取所有球
+    const balls = drawBallJar.querySelectorAll('.ball');
+    const selectedBallIndex = Math.floor(Math.random() * balls.length);
+    const selectedBall = balls[selectedBallIndex];
+
+    // 设置所有球半透明
+    balls.forEach(ball => {
+        ball.style.opacity = '0.3';
+    });
+
+    // 开始闪烁动画
+    let currentIndex = 0;
+    let passCount = 0; // 记录经过被选中球的次数
+    const interval = setInterval(() => {
+        // 重置上一个球的透明度
+        if (currentIndex > 0) {
+            balls[currentIndex - 1].style.opacity = '0.3';
+        } else {
+            balls[balls.length - 1].style.opacity = '0.3';
         }
 
+        // 设置当前球不透明
+        balls[currentIndex].style.opacity = '1';
+
+        // 如果当前球是被选中的球，增加计数
+        if (currentIndex === selectedBallIndex) {
+            passCount++;
+        }
+
+        // 如果第二次经过被选中的球，停止动画
+        if (passCount === 2) {
+            clearInterval(interval);
+            // 设置其他球完全透明
+            balls.forEach((ball, index) => {
+                if (index !== selectedBallIndex) {
+                    ball.style.opacity = '0';
+                }
+            });
+            
+            // 获取被选中球的颜色
+    selectedBallColor = selectedBall.classList.contains('red') ? 'red' : 'blue';
+    
+    // 将结果存储在全局变量中
+    window.selectedBallColor = selectedBallColor;
+
+    // 更新第五页的球颜色显示
+    document.getElementById("ballColorExplanation").textContent = selectedBallColor;
+    document.getElementById("rewardExplanation").textContent = 
+        selectedBallColor === "red" ? "+2" : "-2";
+    const reward = selectedBallColor === "red" ? 7 : 3;
+    document.getElementById("finalReward").textContent = reward;
+
+            
+            return;
+        }
+
+        currentIndex = (currentIndex + 1) % balls.length;
+    }, 200);
+}
+
+
+            // 添加选择动画函数
+function showSelectionAnimation() {
+    const jarA = document.getElementById('originalJarA');
+    const jarB = document.getElementById('originalJarB');
+    const selectedJarName = document.getElementById('selectedJarName').textContent;
+
+    let opacity = 1;
+    let count = 0;
+    const maxCount = 10; // 闪烁次数
+
+    const animation = setInterval(() => {
+        if (count >= maxCount) {
+            clearInterval(animation);
+            // 最终状态
+            if (selectedJarName === "Jar A") {
+                jarA.style.opacity = 1;
+                jarB.style.opacity = 0.3;
+            } else {
+                jarA.style.opacity = 0.3;
+                jarB.style.opacity = 1;
+            }
+            return;
+        }
+
+        // 交替变化透明度
+        opacity = opacity === 1 ? 0.3 : 1;
+        jarA.style.opacity = opacity;
+        jarB.style.opacity = opacity === 1 ? 0.3 : 1;
+        count++;
+    }, 150); // 每100ms变化一次
+}
+
+
+// 修改calculateAndDisplayReward函数
+function calculateAndDisplayReward() {
+    // 随机选择结算轮次
+    const selectedRoundIndex = Math.floor(Math.random() * experimentData.length);
+    const selectedRoundData = experimentData[selectedRoundIndex];
+
+    // 获取概率值
+    const jarAChance = selectedRoundData.sliderAValue;
+    const jarBChance = selectedRoundData.sliderBValue;
+
+    // 随机选择罐子
+    let selectedJar, selectedJarName, selectedJarExplanation;
+    if (Math.random() * 100 < jarAChance) {
+        selectedJar = selectedRoundData.jarA;
+        selectedJarName = "Jar A";
+        selectedJarExplanation = "Jar A";
+    } else {
+        selectedJar = selectedRoundData.jarB;
+        selectedJarName = "Jar B";
+        selectedJarExplanation = "Jar B";
+    }
+
+    // 显示结果弹窗
+    document.getElementById("rewardResult").style.display = "block";
+    showRewardPage(1);
+    document.getElementById("selectedRoundText").textContent = selectedRoundData.round;
+    document.getElementById("selectedJarName").textContent = selectedJarName;
+    document.getElementById("selectedJarExplanation").textContent = selectedJarExplanation;
+
+    // 显示原始罐子状态
+    displayJar(document.getElementById("originalJarA"), selectedRoundData.jarA, "Jar A");
+    displayJar(document.getElementById("originalJarB"), selectedRoundData.jarB, "Jar B");
+
+    // 调整两个罐子的显示和布局
+    const jarContainer = document.querySelector('.comparison-jars');
+    jarContainer.style.display = 'flex';
+    jarContainer.style.justifyContent = 'center';
+    jarContainer.style.gap = '50px'; // 增加两个罐子之间的间距
+    jarContainer.style.marginTop = '80px'; // 统一容器位置 
+
+    const ballContainers = document.querySelectorAll('.comparison-jars .ball-container');
+    ballContainers.forEach(container => {
+        container.style.top = '-30px'; // 球整体向上移动更多
+    });
+    
+
+    // ==== 关键修改部分：生成实际罐子状态 ====
+    // 获取原始罐子的球颜色顺序
+    const originalJarElement = selectedJarName === "Jar A" ? 
+        document.getElementById("originalJarA") : 
+        document.getElementById("originalJarB");
+    const originalBalls = Array.from(originalJarElement.querySelectorAll('.ball'));
+
+    // 创建实际罐子配置
+    const actualJar = {
+        red: selectedJar.red,
+        blue: selectedJar.blue
+    };
+
+    // 生成新球数组（保留原始红蓝位置，替换灰色球）
+    const newBalls = [];
+    originalBalls.forEach(ball => {
+        if (ball.classList.contains('red')) {
+            newBalls.push('red');
+        } else if (ball.classList.contains('blue')) {
+            newBalls.push('blue');
+        } else {
+            // 随机替换灰色球
+            if (Math.random() < 0.5) {
+                newBalls.push('red');
+                actualJar.red++;
+            } else {
+                newBalls.push('blue');
+                actualJar.blue++;
+            }
+        }
+    });
+
+    // 显示实际罐子
+    const resultJarElement = document.getElementById("resultJar");
+    displayJar(resultJarElement, actualJar, selectedJarName);
+    
+    // 手动替换球元素以保持顺序
+    const ballContainer = resultJarElement.querySelector('.ball-container');
+    ballContainer.innerHTML = ''; // 清空自动生成的球
+    newBalls.forEach(color => {
+        const ball = document.createElement('div');
+        ball.className = `ball ${color}`;
+        ballContainer.appendChild(ball);
+    });
+
+    // 调整样式
+    resultJarElement.style.margin = "0 auto";
+    resultJarElement.style.float = "none";
+    resultJarElement.style.width = "200px";
+    resultJarElement.style.height = "200px";
+    resultJarElement.style.backgroundImage = "url('罐子.png')";
+    resultJarElement.style.backgroundSize = '100% 100%';
+    resultJarElement.style.marginTop = '50px'; // 新增：使罐子整体下移
+    ballContainer.style.top = '-30px';
+    ballContainer.style.left = '10px';
+
+    // 显示意愿点比例
+    document.getElementById("originalJarAPercent").textContent = jarAChance;
+    document.getElementById("originalJarBPercent").textContent = jarBChance;
+
+    // 关闭结果弹窗
+    document.getElementById("closeResult").addEventListener("click", function() {
+        document.getElementById("rewardResult").style.display = "none";
+        showEndScreen();
+    });
+}
+
+        // 显示实验结束界面
+        function showEndScreen() {
+            blankScreen.textContent = "Thank you for being part of this study! You can press the spacebar to exit now, or the system will close in 10 seconds.";
+            blankScreen.style.display = "flex";
+            exportToExcel();
+
+            // 监听空格键按下事件
+            document.addEventListener("keydown", function(event) {
+                if (event.code === "Space") {
+                    window.close();
+                }
+            });
+
+            // 10秒后自动退出
+            setTimeout(() => {
+                window.close();
+            }, 10000);
+        }
     </script>
 </body>
 </html>
